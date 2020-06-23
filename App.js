@@ -1,19 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { WebView } from "react-native-webview";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <WebView
+      source={{ uri: "https://klcconline.com/" }}
+      style={{ paddingTop: 20 }}
+      onLoad={(syntheticEvent) => {
+        const { nativeEvent } = syntheticEvent;
+        console.log("======URL", nativeEvent);
+      }}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
