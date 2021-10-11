@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "klcc",
+    "name": "KLCC",
     "slug": "klcc",
-    "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "privacy": "unlisted",
+    "platforms": ["ios", "android"],
+    "version": "1.0.1",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -12,7 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-      "package": "com.klcconlone.mobile",
+      "package": "com.klcconline.mobile",
       "versionCode": 1001
     },
     "updates": {
@@ -20,7 +21,14 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.klcc.mobile",
+      "buildNumber": "1.1.1",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "To share or upload photos, we need access to your camera.",
+        "NSMicrophoneUsageDescription": "To upload or share audio, we need access to your microphone",
+        "NSPhotoLibraryUsageDescription": "To share or upload photos, we need access to your photo library"
+      }
     }
   }
 }

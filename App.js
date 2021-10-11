@@ -1,27 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Linking,
+  Platform,
+  StatusBar,
+} from "react-native";
 import { WebView } from "react-native-webview";
+// import { NavigationContainer } from "@react-navigation/native";
+// import Navigation from "./src/Navigation";
+// import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [isLoaded, setIsLoaded] = useState(true);
-  return isLoaded ? (
-    <WebView
-      source={{ uri: "https://klcconline.com/" }}
-      style={{ paddingTop: 20 }}
-      onLoad={(syntheticEvent) => {
-        const { nativeEvent } = syntheticEvent;
-        console.log("======URL", nativeEvent);
-        setIsLoaded(true);
-      }}
-    />
-  ) : (
-    <View style={styles.imageWrapper}>
-      <Image
-        source={require("./assets/splash.png")}
-        resizeMode="contain"
-        style={styles.image}
+  const [hasRedirected, setHasRedirected] = useState(false);
+  const webview = useRef();
+
+  const onNavigationStateChange = (event) => {
+    const { url } = event;
+    // console.log("=======", url);
+    if (url.includes("marketplace.zoom.us")) {
+      webview.current.stopLoading();
+      Linking.openURL(url);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.droidSafeArea}>
+      <WebView
+        source={{ uri: "https://klcconline.com/" }}
+        style={{ paddingTop: 0 }}
+        onLoad={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          onNavigationStateChange(nativeEvent);
+        }}
+        ref={webview}
+        startInLoadingState
+        scalesPageToFit
+        javaScriptEnabled
+        domStorageEnabled
+        onNavigationStateChange={
+          !hasRedirected ? onNavigationStateChange : null
+        }
+        mixedContentMode="always"
+        thirdPartyCookiesEnabled
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -32,16 +57,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  imageWrapper: {
-    width: "100%",
-    height: "100%",
+  droidSafeArea: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });
